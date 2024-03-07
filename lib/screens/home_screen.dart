@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pilem/models/movie.dart';
+import 'package:pilem/screens/detail_screen.dart';
 import 'package:pilem/services/api_services.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -35,7 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loadMovies();
   }
@@ -83,22 +83,34 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (BuildContext build, int index) {
                 final Movie movie = movies[index];
                 return GestureDetector(
-                    onTap: () => {
-                          //ke screen detail
-                        },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(children: [
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DetailScreen(movie: movie),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
                         Image.network(
                           "https://image.tmdb.org/t/p/w500${movie.posterPath}",
                           width: 100,
                           height: 150,
                           fit: BoxFit.cover,
                         ),
-                        Text(movie.title),
-                        Text("TESSSSS")
-                      ]),
-                    ));
+                        Text(
+                          movie.title.length > 14
+                              ? '${movie.title.substring(0, 10)}...'
+                              : movie.title,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
               }),
         )
       ],
